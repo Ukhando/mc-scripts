@@ -36,6 +36,11 @@ end
 
 local function percentageBar(x, y, w, per)
     setCursorPos(x, y)
+    if per > 1 then
+        per = 1
+    elseif per < 0 then
+        per = 0
+    end
     local filled = math.ceil((w - 2) * per)
     local text = "[" .. string.rep("=", filled) .. string.rep(" ", w - filled - 2) .. "]"
     write(text)
@@ -43,9 +48,31 @@ end
 
 local function percentageBarAll(per)
     local width, height = getSize()
+    if per > 1 then
+        per = 1
+    elseif per < 0 then
+        per = 0
+    end
     local filled = math.ceil((width - 2) * per)
     local text = "[" .. string.rep("=", filled) .. string.rep(" ", width - filled - 2) .. "]"
     write(text)
+end
+
+local function round(amount, div)
+    local a = amount * 100 / div
+    return math.floor(a + 0.5) / 100
+end
+
+local function writeUnit(amount, unit)
+    if amount < 1000 then
+        return round(amount, 1) .. " " .. unit
+    elseif amount < 1000000 then
+        return round(amount, 1000) .. " k" .. unit
+    elseif amount < 1000000000 then
+        return round(amount, 1000000) .. " M" .. unit
+    else
+        return round(amount, 1000000000) .. " G" .. unit
+    end
 end
 
 return {
@@ -60,4 +87,5 @@ return {
     setBackgroundColor = setBackgroundColor,
     percentageBar = percentageBar,
     percentageBarAll = percentageBarAll,
+    writeUnit = writeUnit,
 }

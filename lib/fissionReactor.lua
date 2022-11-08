@@ -30,6 +30,31 @@ local function getTemperature()
 	return peripheral.find("fissionReactorLogicAdapter").getTemperature()
 end
 
+local function getMaxGreenTemperature()
+	return 600
+end
+
+local function getMaxYellowTemperature()
+	return 1000
+end
+
+local function getMaxOrangeTemperature()
+	return 1200
+end
+
+local function getTemperatureColor()
+	local temp = getTemperature()
+	if temp < getMaxGreenTemperature() then
+		return colors.green
+	elseif temp < getMaxYellowTemperature() then
+		return colors.yellow
+	elseif temp < getMaxOrangeTemperature() then
+		return colors.orange
+	else
+		return colors.red
+	end
+end
+
 local function getStatus()
 	return peripheral.find("fissionReactorLogicAdapter").getStatus()
 end
@@ -110,4 +135,8 @@ return {
 	getCoolantCapacity = getCoolantCapacity,
 	getBurnRate = getBurnRate,
 	getActualBurnRate = getActualBurnRate,
+	getMaxGreenTemperature = getMaxGreenTemperature,
+	getMaxYellowTemperature = getMaxYellowTemperature,
+	getMaxOrangeTemperature = getMaxOrangeTemperature,
+	getTemperatureColor = getTemperatureColor,
 }
