@@ -34,6 +34,20 @@ local function setBackgroundColor(color)
     peripheral.find("monitor").setBackgroundColor(color)
 end
 
+local function percentageBar(x, y, w, per)
+    setCursorPos(x, y)
+    local filled = math.ceil((w - 2) * per)
+    local text = "[" .. string.rep("=", filled) .. string.rep(" ", w - filled - 2) .. "]"
+    write(text)
+end
+
+local function percentageBarAll(per)
+    local width, height = getSize()
+    local filled = math.ceil((width - 2) * per)
+    local text = "[" .. string.rep("=", filled) .. string.rep(" ", width - filled - 2) .. "]"
+    write(text)
+end
+
 return {
     setTextScale = setTextScale,
     getTextScale = getTextScale,
@@ -44,4 +58,6 @@ return {
     clearLine = clearLine,
     setTextColor = setTextColor,
     setBackgroundColor = setBackgroundColor,
+    percentageBar = percentageBar,
+    percentageBarAll = percentageBarAll,
 }

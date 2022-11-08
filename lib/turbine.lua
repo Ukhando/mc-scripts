@@ -33,6 +33,10 @@ local function getMaxEnergy ()
     return cube.getMaxEnergy()
 end
 
+local function getBlades()
+    return peripheral.find("turbineValve").getBlades()
+end
+
 return {
     getSteam = getSteam,
     getSteamCapacity = getSteamCapacity,
@@ -40,5 +44,6 @@ return {
     getProductionRate = getProductionRate,
     getMaxProduction = getMaxProduction,
     getEnergy = getEnergy,
-    getMaxEnergy = getMaxEnergy
+    getMaxEnergy = getMaxEnergy,
+    getBlades = getBlades,
 }
