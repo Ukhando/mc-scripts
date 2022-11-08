@@ -12,7 +12,7 @@ local function pullEventRaw()
     if event ~= nil then
         os.queueEvent(unpack(event))
     end
-    return {os.pullEventRaw()}
+    return os.pullEventRaw()
 end
 
 local function pullEvent()
@@ -20,7 +20,7 @@ local function pullEvent()
     if event ~= nil then
         os.queueEvent(unpack(event))
     end
-    return {os.pullEvent()}
+    return os.pullEvent()
 end
 
 return {
