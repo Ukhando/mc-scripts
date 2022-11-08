@@ -64,7 +64,7 @@ local function round(amount, div)
 end
 
 local function formatNumber(number)
-    return string.format('%5.2d', number)
+    return string.format('%6.2f', number)
 end
 
 local function writeUnit(amount, unit)
