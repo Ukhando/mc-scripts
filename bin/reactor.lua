@@ -1,7 +1,7 @@
-local reactor = require('lib.fissionReactor')
-local monitor = require('lib.monitor')
-local turbine = require('lib.turbine')
-local induction = require('lib.induction')
+local reactor = require('/lib/fissionReactor')
+local monitor = require('/lib/monitor')
+local turbine = require('/lib/turbine')
+local induction = require('/lib/induction')
 
 local running = true
 local timer = nil
@@ -22,6 +22,7 @@ while running do
         local maxBurnRate = reactor.getMaxBurnRate()
         local burnRate = math.min(burnRateTarget, maxBurnRate)
         reactor.setBurnRate(burnRate)
+        os.queueEvent('update:reactor')
     elseif type == 'update:reactor' then
         local maxRate = reactor.getMaxBurnRate()
         local targetRate = reactor.getBurnRate()
@@ -34,6 +35,7 @@ while running do
         monitor.percentageBarAll(actualPer)
         monitor.setCursorPos(1, 3)
         monitor.percentageBarAll(targetPer)
+        os.queueEvent('update:induction')
     elseif type == 'update:induction' then
         local maxRate = reactor.getMaxBurnRate()
         local actualRate = reactor.getActualBurnRate()
@@ -50,14 +52,12 @@ while running do
         monitor.percentageBarAll(perUsageInduction)
         monitor.setCursorPos(1, 8)
         monitor.percentageBarAll(filled)
+        os.queueEvent('start:timer')
     elseif type == 'redstone' then
         os.queueEvent('set:reactor')
     elseif type == 'timer' and args[1] == timer then
         timer = nil
         os.queueEvent('set:reactor')
-        os.queueEvent('update:reactor')
-        os.queueEvent('update:induction')
-        os.queueEvent('start:timer')
     elseif type == 'start:timer' then
         if timer ~= nil then
             os.cancelTimer(timer)
