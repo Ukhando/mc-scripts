@@ -1,7 +1,7 @@
 local queue = {}
 
 local function queueEvent(event, ...)
-    table.insert({
+    table.insert(queue, {
         event,
         unpack(arg)
     })

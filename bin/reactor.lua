@@ -49,7 +49,7 @@ while running do
         monitor.setCursorPos(1, 2)
         monitor.write("Temperature: ")
         monitor.setTextColor(color)
-        monitor.write((temp - 273.15) .. " c")
+        monitor.write(monitor.round(temp - 273.15, 1) .. " c")
         monitor.setCursorPos(1, 3)
         monitor.percentageBarAll(tempPer)
         monitor.setTextColor(colors.white)
@@ -81,6 +81,7 @@ while running do
         monitor.percentageBarAll(perOutputUsage)
         monitor.setCursorPos(1, 12)
         monitor.write("Filled : " .. (filled * 100) .. "%")
+        monitor.setCursorPos(1, 13)
         monitor.percentageBarAll(filled)
     elseif type == 'redstone' then
         queue.queueEvent('set:reactor')
