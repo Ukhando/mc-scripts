@@ -10,6 +10,7 @@ monitor.setBackgroundColor(colors.black)
 monitor.setTextColor(colors.white)
 monitor.clear()
 queue.queueEvent('start:timer')
+local modifier = 1
 
 while running do
     local args = {queue.pullEventRaw()}
@@ -21,11 +22,12 @@ while running do
         local powerPerMb = turbine.getBlades() * 7.14
         local powerTarget = induction.getLastOutput()
         local powerFilled = induction.getEnergyFilledPercentage()
-        local modifier = 1
         if powerFilled > 0.6 then
             modifier = 0.5
         elseif powerFilled < 0.5 then
             modifier = 2
+        else
+            modifier = 1
         end
         local burnRateTarget = powerTarget * modifier / powerPerMb / 1000
         local maxBurnRate = reactor.getMaxBurnRate()
@@ -39,48 +41,59 @@ while running do
         local targetRate = reactor.getBurnRate()
         local targetPer = targetRate / maxRate
         local color = reactor.getTemperatureColor()
+        local modifierColor = colors.white
+        local modifierChar = ''
+        if modifier > 1 then
+            modifierColor = colors.red
+            modifierChar = '+'
+        elseif modifier < 1 then
+            modifierColor = colors.green
+            modifierChar = '-'
+        end
         if reactor.getStatus() then
             monitor.setTextColor(colors.green)
         else
             monitor.setTextColor(colors.red)
         end
         monitor.setCursorPos(1, 1)
-        monitor.write("Reactor")
+        monitor.write("Reactor ")
+        monitor.setTextColor(modifierColor)
+        monitor.write(modifierChar)
+        monitor.setTextColor(colors.white)
         monitor.setCursorPos(1, 2)
         monitor.write("Temperature: ")
         monitor.setTextColor(color)
-        monitor.write(monitor.round(temp - 273.15, 1) .. " c")
+        monitor.write(monitor.formatNumber(monitor.round(temp - 273.15, 1)) .. " c      ")
         monitor.setCursorPos(1, 3)
         monitor.percentageBarAll(tempPer)
         monitor.setTextColor(colors.white)
         monitor.setCursorPos(1, 4)
-        monitor.write("Burnrate:   " .. targetRate .. " mB/t")
+        monitor.write("Burnrate:    " .. monitor.formatNumber(targetRate) .. " mB/t      ")
         monitor.setCursorPos(1, 5)
         monitor.percentageBarAll(targetPer)
     elseif type == 'update:induction' then
-        local maxRate = reactor.getMaxBurnRate()
-        local powerPerMb = turbine.getBlades() * 7.14
         local output = induction.getLastOutput()
         local input = induction.getLastInput()
         local maxUsage = induction.getTransferCap()
         local perOutputUsage = output / maxUsage
-        local perInputUsage = input / (maxRate * powerPerMb)
-        local perUsage = output / (maxRate * powerPerMb)
+        local precision = math.min(input, output) / math.max(input, output)
         local filled = induction.getEnergyFilledPercentage()
         monitor.setCursorPos(1, 7)
         monitor.write("Induction")
         monitor.setCursorPos(1, 8)
-        monitor.write("Input : ")
+        monitor.write("Input:       ")
         monitor.writeUnit(input, 'FE/t')
+        monitor.write("      ")
         monitor.setCursorPos(1, 9)
-        monitor.percentageBarAll(perInputUsage)
+        monitor.percentageBarAll(precision)
         monitor.setCursorPos(1, 10)
-        monitor.write("Output : ")
+        monitor.write("Output:      ")
         monitor.writeUnit(output, 'FE/t')
+        monitor.write("      ")
         monitor.setCursorPos(1, 11)
         monitor.percentageBarAll(perOutputUsage)
         monitor.setCursorPos(1, 12)
-        monitor.write("Filled : " .. (filled * 100) .. "%")
+        monitor.write("Filled:      " .. monitor.formatNumber(filled * 100) .. "%      ")
         monitor.setCursorPos(1, 13)
         monitor.percentageBarAll(filled)
     elseif type == 'redstone' then

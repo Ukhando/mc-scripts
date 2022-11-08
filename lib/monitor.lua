@@ -63,15 +63,19 @@ local function round(amount, div)
     return math.floor(a + 0.5) / 100
 end
 
+local function formatNumber(number)
+    return string.format('%3.2d', number)
+end
+
 local function writeUnit(amount, unit)
     if amount < 1000 then
-        return write(round(amount, 1) .. " " .. unit)
+        return write(formatNumber(round(amount, 1)) .. " " .. unit)
     elseif amount < 1000000 then
-        return write(round(amount, 1000) .. " k" .. unit)
+        return write(formatNumber(round(amount, 1000)) .. " k" .. unit)
     elseif amount < 1000000000 then
-        return write(round(amount, 1000000) .. " M" .. unit)
+        return write(formatNumber(round(amount, 1000000)) .. " M" .. unit)
     else
-        return write(round(amount, 1000000000) .. " G" .. unit)
+        return write(formatNumber(round(amount, 1000000000)) .. " G" .. unit)
     end
 end
 
@@ -88,5 +92,6 @@ return {
     percentageBar = percentageBar,
     percentageBarAll = percentageBarAll,
     writeUnit = writeUnit,
-    round = round
+    round = round,
+    formatNumber = formatNumber,
 }
