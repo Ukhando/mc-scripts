@@ -65,13 +65,13 @@ end
 
 local function writeUnit(amount, unit)
     if amount < 1000 then
-        return round(amount, 1) .. " " .. unit
+        return write(round(amount, 1) .. " " .. unit)
     elseif amount < 1000000 then
-        return round(amount, 1000) .. " k" .. unit
+        return write(round(amount, 1000) .. " k" .. unit)
     elseif amount < 1000000000 then
-        return round(amount, 1000000) .. " M" .. unit
+        return write(round(amount, 1000000) .. " M" .. unit)
     else
-        return round(amount, 1000000000) .. " G" .. unit
+        return write(round(amount, 1000000000) .. " G" .. unit)
     end
 end
 
@@ -88,4 +88,5 @@ return {
     percentageBar = percentageBar,
     percentageBarAll = percentageBarAll,
     writeUnit = writeUnit,
+    round = round
 }

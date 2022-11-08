@@ -61,7 +61,7 @@ while running do
         local maxRate = reactor.getMaxBurnRate()
         local powerPerMb = turbine.getBlades() * 7.14
         local output = induction.getLastOutput()
-        local input = induction.getLastOutput()
+        local input = induction.getLastInput()
         local maxUsage = induction.getTransferCap()
         local perOutputUsage = output / maxUsage
         local perInputUsage = input / (maxRate * powerPerMb)
